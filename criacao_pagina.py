@@ -161,7 +161,7 @@ html_content = f"""
     updateMetricsGraph();
     
     function getColor(value, metric) {{
-    if (metric === 'R²') {{
+    if (metric === 'R2') {{
         let normalizedValue = (value - 0) / (1 - 0); 
         let red = Math.floor(255 * (1 - normalizedValue));
         let green = Math.floor(255 * normalizedValue);
