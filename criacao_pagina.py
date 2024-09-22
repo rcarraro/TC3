@@ -29,19 +29,19 @@ html_content = f"""
 </head>
 <body>
 
-<h1>Variação do Preço do Bitcoin</h1>
+<h1>Variacao do Preco do Bitcoin</h1>
 <div>
-    <button class="button" onclick="updateGraph('price')">Preço</button>
+    <button class="button" onclick="updateGraph('price')">Preco</button>
     <button class="button" onclick="updateGraph('lag_1')">Lag 1 Dia</button>
     <button class="button" onclick="updateGraph('lag_7')">Lag 7 Dias</button>
-    <button class="button" onclick="updateGraph('ma_7')">Média Móvel 7 Dias</button>
+    <button class="button" onclick="updateGraph('ma_7')">Media Móvel 7 Dias</button>
 </div>
 <div id="priceGraph"></div>
 
-<h1>Métricas dos Modelos</h1>
-<label for="metricSelect">Selecione a Métrica:</label>
+<h1>Metricas dos Modelos</h1>
+<label for="metricSelect">Selecione a Metrica:</label>
 <select id="metricSelect" onchange="updateMetricsGraph()">
-    <option value="" disabled selected>Escolha uma métrica</option>
+    <option value="" disabled selected>Escolha uma metrica</option>
     {''.join(f'<option value="{metric}">{metric}</option>' for metric in metrics_names)}
 </select>
 
@@ -53,9 +53,9 @@ html_content = f"""
 
 <label for="showAllSelect">Mostrar:</label>
 <select id="showAllSelect" size="3" onchange="updateMetricsGraph()">
-    <option value="single">Métrica/Modelo Selecionado</option>
-    <option value="all">Todas as Métricas para o Modelo</option>
-    <option value="allModels">Todos os Modelos para a Métrica</option>
+    <option value="single">Metrica/Modelo Selecionado</option>
+    <option value="all">Todas as Metricas para o Modelo</option>
+    <option value="allModels">Todos os Modelos para a Metrica</option>
 </select>
 
 <div id="metricsGraph"></div>
@@ -81,7 +81,7 @@ html_content = f"""
         }};
 
         var layout = {{
-            title: 'Variação de ' + variable + ' do Bitcoin',
+            title: 'Variacao de ' + variable + ' do Bitcoin',
             xaxis: {{ title: 'Data' }},
             yaxis: {{ title: variable + ' (USD)' }},
             plot_bgcolor: '#f4f4f4',
@@ -110,7 +110,7 @@ html_content = f"""
                 marker: {{ color: getColor(value, selectedMetric) }}
             }});
             var layout = {{
-                title: 'Métrica ' + selectedMetric + ' para o modelo ' + selectedModel,
+                title: 'Metrica ' + selectedMetric + ' para o modelo ' + selectedModel,
                 xaxis: {{ title: 'Modelo' }},
                 yaxis: {{ title: selectedMetric }},
                 plot_bgcolor: '#f4f4f4',
@@ -128,9 +128,9 @@ html_content = f"""
                 }});
             }}
             var layout = {{
-                title: 'Todas as Métricas para o modelo ' + selectedModel,
-                xaxis: {{ title: 'Métricas' }},
-                yaxis: {{ title: 'Valor', type: 'log' }}, // Escala logarítmica
+                title: 'Todas as Metricas para o modelo ' + selectedModel,
+                xaxis: {{ title: 'Metricas' }},
+                yaxis: {{ title: 'Valor', type: 'log' }},
                 plot_bgcolor: '#f4f4f4',
                 paper_bgcolor: '#f4f4f4',
                 barmode: 'group'
@@ -147,7 +147,7 @@ html_content = f"""
                 }});
             }}
             var layout = {{
-                title: 'Todos os Modelos para a métrica ' + selectedMetric,
+                title: 'Todos os Modelos para a metrica ' + selectedMetric,
                 xaxis: {{ title: 'Modelos' }},
                 yaxis: {{ title: selectedMetric }},
                 plot_bgcolor: '#f4f4f4',
@@ -162,21 +162,20 @@ html_content = f"""
     
     function getColor(value, metric) {{
     if (metric === 'R²') {{
-        let normalizedValue = (value - 0) / (1 - 0); // Assuming R² is between 0 and 1
-        let red = Math.floor(255 * (1 - normalizedValue)); // Closer to red if worse
-        let green = Math.floor(255 * normalizedValue); // Closer to green if better
+        let normalizedValue = (value - 0) / (1 - 0); 
+        let red = Math.floor(255 * (1 - normalizedValue));
+        let green = Math.floor(255 * normalizedValue);
 
-        // Limit color values
         red = Math.max(0, Math.min(255, red));
         green = Math.max(0, Math.min(255, green));
 
-        return 'rgba(' + red + ', ' + green + ', 0, 0.7)'; // Gradient from red to green
+        return 'rgba(' + red + ', ' + green + ', 0, 0.7)'; 
     }} else {{
         let min = Math.min(...metricsData[metric]);
         let max = Math.max(...metricsData[metric]);
 
         if (min === max) {{
-            return 'rgb(255, 255, 0)'; // Yellow if all values are the same
+            return 'rgb(255, 255, 0)'; 
         }}
 
         let range = max - min;
@@ -188,7 +187,7 @@ html_content = f"""
         red = Math.max(0, Math.min(255, red));
         green = Math.max(0, Math.min(255, green));
 
-        return 'rgb(' + red + ', ' + green + ', 0)'; // Gradient from red to green
+        return 'rgb(' + red + ', ' + green + ', 0)'; 
     }}
 }}
 </script>
