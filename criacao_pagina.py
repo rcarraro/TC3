@@ -5,27 +5,21 @@ from datetime import datetime
 current_date = datetime.now().strftime('%Y%m%d')
 file_name = f'.\\historico_bitcoin\\bitcoin_data{current_date}.parquet'
 
-# Carregar o arquivo .parquet
 df_features = pd.read_parquet(file_name)
 
-# Resetar o índice para garantir que o timestamp esteja como coluna
 df_features.reset_index(inplace=True)
 
-# Converter a coluna timestamp para formato string
 df_features['timestamp'] = df_features['timestamp'].astype(str)
 
-# Selecionar as colunas relevantes e converter para um formato de lista de dicionários
 df_json = df_features[['timestamp', 'price', 'lag_1', 'lag_7', 'ma_7']].to_dict(orient='records')
 
 with open("model_metrics.json", 'r') as f:
     model_metrics = json.load(f)
 
-# Criar uma lista de métricas para o gráfico
 metrics_names = list(model_metrics[next(iter(model_metrics))].keys())
 models = list(model_metrics.keys())
 metrics_values = {metric: [model_metrics[model][metric] for model in models] for metric in metrics_names}
 
-# Criar o conteúdo do HTML com dados embutidos em JSON
 html_content = f"""
 <!DOCTYPE html>
 <html>
@@ -67,20 +61,16 @@ html_content = f"""
 <div id="metricsGraph"></div>
 
 <script>
-    // Dados embutidos no formato JSON
     var data = {json.dumps(df_json, indent=4)};
     var metricsData = {json.dumps(metrics_values, indent=4)};
     var models = {json.dumps(models)};
     var metricsNames = {json.dumps(metrics_names)};
 
-    // Extrair timestamps
     let timestamps = data.map(d => d.timestamp);
 
-    // Função para atualizar o gráfico de preços
     function updateGraph(variable) {{
         let values = data.map(d => d[variable]);
         
-        // Criar o gráfico do Bitcoin
         var trace1 = {{
             x: timestamps,
             y: values,
@@ -101,10 +91,8 @@ html_content = f"""
         Plotly.newPlot('priceGraph', [trace1], layout);
     }}
 
-    // Inicializar o gráfico com o preço
     updateGraph('price');
 
-    // Função para atualizar o gráfico de métricas
     function updateMetricsGraph() {{
         var selectedMetric = document.getElementById('metricSelect').value;
         var selectedModel = document.getElementById('modelSelect').value;
@@ -170,12 +158,9 @@ html_content = f"""
         Plotly.newPlot('metricsGraph', traces, layout);
     }}
 
-    // Inicializar o gráfico de métricas
     updateMetricsGraph();
     
-    // Função para determinar a cor de acordo com o valor
     function getColor(value, metric) {{
-    // For R², we want a gradient from red (bad) to green (good)
     if (metric === 'R²') {{
         let normalizedValue = (value - 0) / (1 - 0); // Assuming R² is between 0 and 1
         let red = Math.floor(255 * (1 - normalizedValue)); // Closer to red if worse
@@ -200,7 +185,6 @@ html_content = f"""
         let red = Math.floor(255 * normValue);
         let green = 255 - red;
 
-        // Limit color values
         red = Math.max(0, Math.min(255, red));
         green = Math.max(0, Math.min(255, green));
 
@@ -212,6 +196,5 @@ html_content = f"""
 </html>
 """
 
-# Escrever o conteúdo para um arquivo HTML
 with open('index.html', 'w') as f:
     f.write(html_content)
